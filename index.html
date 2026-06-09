@@ -3,159 +3,361 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task & Earn - Telegram Mini App</title>
+    <title>Centric Earn - Telegram Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* Modern Premium Theme Styling */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background-color: #151515; 
+            background: linear-gradient(180deg, #0f0f12 0%, #17171f 100%); 
             color: #ffffff; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            justify-content: flex-start; 
             min-height: 100vh; 
             padding: 20px;
+            overflow-x: hidden;
         }
-        h2 { margin-top: 10px; font-weight: 600; font-size: 24px; color: #f5f5f7; }
-        .user-id { font-size: 12px; color: #8e8e93; margin-bottom: 25px; }
-        
-        /* Balance Card */
-        .balance-card { 
-            background: linear-gradient(135deg, #2c2c2e 0%, #1c1c1e 100%); 
-            width: 100%; 
-            max-width: 400px; 
-            padding: 30px 20px; 
-            border-radius: 20px; 
-            text-align: center; 
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-            border: 1px solid #3a3a3c;
-            margin-bottom: 30px;
-        }
-        .balance-card h3 { font-size: 14px; color: #0a84ff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
-        .balance-card h1 { font-size: 42px; font-weight: 700; color: #ffd60a; }
 
-        /* Tasks Section */
-        .tasks-container { width: 100%; max-width: 400px; text-align: left; }
-        .tasks-container h4 { font-size: 16px; color: #8e8e93; margin-bottom: 15px; padding-left: 5px; }
-        
-        .task-box {
-            background-color: #1c1c1e;
-            border: 1px solid #2c2c2e;
+        /* Profile Header */
+        .header {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 12px 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+        }
+        .avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #007aff, #00c6ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-right: 12px;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+        }
+        .user-info h2 { font-size: 16px; font-weight: 600; color: #f5f5f7; }
+        .user-info p { font-size: 12px; color: #8e8e93; margin-top: 2px; }
+
+        /* Main Balance Area */
+        .balance-section { 
+            text-align: center;
+            margin-bottom: 30px;
+            animation: pulse 3s infinite alternate;
+        }
+        .balance-subtitle { font-size: 13px; color: #0a84ff; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 8px; }
+        .balance-amount { font-size: 48px; font-weight: 800; color: #ffd60a; display: flex; align-items: center; justify-content: center; gap: 10px; text-shadow: 0 0 20px rgba(255, 214, 10, 0.2); }
+        .balance-amount i { color: #ffd60a; font-size: 38px; }
+
+        /* Quick Action Grid (Claim Daily) */
+        .quick-actions {
+            width: 100%;
+            max-width: 420px;
+            margin-bottom: 25px;
+        }
+        .claim-card {
+            background: linear-gradient(135deg, #242430 0%, #1a1a24 100%);
+            border: 1px solid rgba(255, 214, 10, 0.2);
             padding: 16px;
-            border-radius: 14px;
+            border-radius: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        .claim-text h4 { font-size: 15px; color: #ffffff; margin-bottom: 4px; }
+        .claim-text p { font-size: 12px; color: #ffd60a; font-weight: 600; }
+
+        /* Navigation Tabs */
+        .tab-container {
+            display: flex;
+            width: 100%;
+            max-width: 420px;
+            background: #1c1c24;
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #8e8e93;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .tab.active {
+            background: #2c2c3c;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Content List Container */
+        .content-section { width: 100%; max-width: 420px; }
+        
+        .task-list { display: none; }
+        .task-list.active { display: block; animation: fadeIn 0.4s ease; }
+
+        /* Elegant Task Rows */
+        .task-row {
+            background: #1a1a24;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 16px;
+            border-radius: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
-            transition: transform 0.2s;
+            transition: all 0.2s ease;
         }
-        .task-box:active { transform: scale(0.98); }
-        .task-info h5 { font-size: 15px; font-weight: 600; color: #ffffff; margin-bottom: 4px; }
-        .task-info p { font-size: 13px; color: #34c759; font-weight: bold; }
+        .task-row:hover { border-color: rgba(0, 122, 255, 0.3); }
         
-        .btn { 
-            background-color: #007aff; 
+        .task-left { display: flex; align-items: center; }
+        .task-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #0a84ff;
+            margin-right: 14px;
+        }
+        .task-icon.yt { color: #ff453a; }
+        .task-icon.ref { color: #30d158; }
+
+        .task-details h5 { font-size: 14px; font-weight: 600; color: #ffffff; margin-bottom: 4px; }
+        .task-details p { font-size: 13px; color: #34c759; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+
+        /* Premium Buttons */
+        .btn-action { 
+            background: #007aff; 
             color: white; 
             border: none; 
-            padding: 10px 16px; 
-            font-size: 14px; 
-            font-weight: 600;
-            border-radius: 8px; 
-            cursor: pointer; 
+            padding: 10px 18px; 
+            font-size: 13px; 
+            font-weight: 700;
+            border-radius: 10px; 
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.2);
         }
-        .btn-done { background-color: #3a3a3c; color: #aeaeb2; cursor: not-allowed; }
+        .btn-action:active { transform: scale(0.95); }
+        
+        .btn-claim { background: linear-gradient(135deg, #ffd60a, #ff9f0a); color: #000000; box-shadow: 0 4px 14px rgba(255, 214, 10, 0.3); }
+        .btn-disabled { background: #2c2c35 !important; color: #7c7c85 !important; cursor: not-allowed; box-shadow: none; }
+
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.02); } }
     </style>
 </head>
 <body>
 
-    <h2>Baga Gammadde, <span id="username">User</span>!</h2>
-    <p class="user-id">ID: <span id="user-id-val">000000000</span></p>
-
-    <div class="balance-card">
-        <h3>Points Walitti Qabame</h3>
-        <h1 id="balance">0 PTS</h1>
+    <div class="header">
+        <div class="avatar" id="avatar-letter">U</div>
+        <div class="user-info">
+            <h2 id="username">Loading User...</h2>
+            <p><i class="fa-solid fa-fingerprint"></i> ID: <span id="user-id-val">00000000</span></p>
+        </div>
     </div>
 
-    <div class="tasks-container">
-        <h4>Hojiiwwan Jiran (Tasks)</h4>
-        
-        <div class="task-box">
-            <div class="task-info">
-                <h5>Join Our Telegram Channel</h5>
-                <p>+50 PTS</p>
+    <div class="balance-section">
+        <p class="balance-subtitle">Total Balance</p>
+        <h1 class="balance-amount"><i class="fa-solid fa-coins"></i> <span id="balance">0</span></h1>
+    </div>
+
+    <div class="quick-actions">
+        <div class="claim-card">
+            <div class="claim-text">
+                <h4>Daily Check-in Reward</h4>
+                <p id="claim-status">+100 PTS Ready to claim</p>
             </div>
-            <button id="task1-btn" class="btn" onclick="completeTelegramTask()">🔊 Hojjedhu</button>
+            <button id="claim-btn" class="btn-action btn-claim" onclick="claimDaily()">Claim</button>
+        </div>
+    </div>
+
+    <div class="tab-container">
+        <div id="tab-tasks" class="tab active" onclick="switchTab('tasks')"><i class="fa-solid fa-list-check"></i> Tasks</div>
+        <div id="tab-frens" class="tab" onclick="switchTab('frens')"><i class="fa-solid fa-users"></i> Frens</div>
+    </div>
+
+    <div class="content-section">
+        
+        <div id="list-tasks" class="task-list active">
+            <div class="task-row">
+                <div class="task-left">
+                    <div class="task-icon"><i class="fa-brands fa-telegram"></i></div>
+                    <div class="task-details">
+                        <h5>Join Our Channel</h5>
+                        <p>+150 PTS</p>
+                    </div>
+                </div>
+                <button id="t-tg-btn" class="btn-action" onclick="doTelegramTask()">Start</button>
+            </div>
+
+            <div class="task-row">
+                <div class="task-left">
+                    <div class="task-icon yt"><i class="fa-brands fa-youtube"></i></div>
+                    <div class="task-details">
+                        <h5>Watch YouTube Video</h5>
+                        <p>+100 PTS</p>
+                    </div>
+                </div>
+                <button id="t-yt-btn" class="btn-action" onclick="doVideoTask()">Watch</button>
+            </div>
         </div>
 
-        <div class="task-box">
-            <div class="task-info">
-                <h5>Watch Daily Ad</h5>
-                <p>+20 PTS</p>
+        <div id="list-frens" class="task-list">
+            <div class="task-row">
+                <div class="task-left">
+                    <div class="task-icon ref"><i class="fa-solid fa-user-plus"></i></div>
+                    <div class="task-details">
+                        <h5>Invite a Friend</h5>
+                        <p>+500 PTS per fren</p>
+                    </div>
+                </div>
+                <button class="btn-action" onclick="inviteFren()">Invite</button>
             </div>
-            <button class="btn" onclick="watchAdTask()">📺 Daawwadhu</button>
+            
+            <div style="text-align: center; color: #8e8e93; font-size: 13px; margin-top: 20px; padding: 10px;">
+                <p><i class="fa-solid fa-info-circle"></i> LocalStorage mode active. Friends tracking requires integration.</p>
+            </div>
         </div>
+
     </div>
 
     <script>
-        // Init Telegram WebApp
+        // Setup Telegram WebApp
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand(); // Skiriinii guutuu akka uumuuf
+        tg.expand();
 
-        // Get User Data From Telegram
+        // Fetch User Elements
         let user = tg.initDataUnsafe.user;
-        let userId = user ? user.id : "guest_user";
-        let uName = user ? user.first_name : "Local Explorer";
+        let userId = user ? user.id : "guest_developer";
+        let uName = user ? user.first_name : "Centric User";
 
-        // Display User Data
+        // Display Profile Info
         document.getElementById('username').innerText = uName;
         document.getElementById('user-id-val').innerText = userId;
+        document.getElementById('avatar-letter').innerText = uName.charAt(0).toUpperCase();
 
-        // Key LocalStorage adda uumuuf
-        const storageKey = 'tma_pts_' + userId;
-        const taskKey = 'tma_task1_' + userId;
+        // Local Storage Keys setup
+        const balanceKey = 'centric_bal_' + userId;
+        const tgTaskKey = 'centric_task_tg_' + userId;
+        const ytTaskKey = 'centric_task_yt_' + userId;
+        const dailyKey = 'centric_daily_' + userId;
 
-        // Load Initial Balance
-        let currentPoints = parseInt(localStorage.getItem(storageKey)) || 0;
-        document.getElementById('balance').innerText = currentPoints + " PTS";
+        // Load Points
+        let currentPoints = parseInt(localStorage.getItem(balanceKey)) || 0;
+        updateBalanceDisplay();
 
-        // Check if Task 1 is already completed
-        if (localStorage.getItem(taskKey) === 'completed') {
-            setTask1Done();
-        }
+        // Check Completed Tasks on startup
+        if (localStorage.getItem(tgTaskKey) === 'done') setButtonDone('t-tg-btn');
+        if (localStorage.getItem(ytTaskKey) === 'done') setButtonDone('t-yt-btn');
+        checkDailyStatus();
 
-        function completeTelegramTask() {
-            if (localStorage.getItem(taskKey) === 'completed') return;
-
-            // Link channel keetii asitti jijjiiri
-            tg.openTelegramLink('https://t.me/Arsi_University'); 
-
-            // Point kenniif
-            addPoints(50);
+        // Navigation tab swapper
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.task-list').forEach(l => l.classList.remove('active'));
             
-            // Task kana akka irra hin deebine cufi
-            localStorage.setItem(taskKey, 'completed');
-            setTask1Done();
+            if (tabName === 'tasks') {
+                document.getElementById('tab-tasks').classList.add('active');
+                document.getElementById('list-tasks').classList.add('active');
+            } else {
+                document.getElementById('tab-frens').classList.add('active');
+                document.getElementById('list-frens').classList.add('active');
+            }
         }
 
-        function watchAdTask() {
-            tg.showAlert("Beeksisa daawwattee xumurteetta! +20 PTS siif dabalameera.");
-            addPoints(20);
+        // Action: Telegram Task
+        function doTelegramTask() {
+            if (localStorage.getItem(tgTaskKey) === 'done') return;
+            tg.openTelegramLink('https://t.me/Arsi_University'); // Link channel keetii as seensi
+            
+            addPoints(150);
+            localStorage.setItem(tgTaskKey, 'done');
+            setButtonDone('t-tg-btn');
         }
 
-        function addPoints(pts) {
-            currentPoints += pts;
-            localStorage.setItem(storageKey, currentPoints);
-            document.getElementById('balance').innerText = currentPoints + " PTS";
+        // Action: Video Task
+        function doVideoTask() {
+            if (localStorage.getItem(ytTaskKey) === 'done') return;
+            tg.showAlert("Video daawwattee xumurteetta! +100 PTS.");
+            
+            addPoints(100);
+            localStorage.setItem(ytTaskKey, 'done');
+            setButtonDone('t-yt-btn');
         }
 
-        function setTask1Done() {
-            const btn = document.getElementById('task1-btn');
-            btn.innerText = "Xumurameera ✓";
-            btn.className = "btn btn-done";
+        // Action: Daily Claim
+        function claimDaily() {
+            const todayStr = new Date().toDateString();
+            if (localStorage.getItem(dailyKey) === todayStr) return;
+
+            addPoints(100);
+            localStorage.setItem(dailyKey, todayStr);
+            checkDailyStatus();
+            tg.showAlert("🎁 Daily check-in +100 PTS argatteetta!");
+        }
+
+        // Action: Invite Link
+        function inviteFren() {
+            let botUsername = "YOUR_BOT_USERNAME"; // Maqaa Bot keetii kan @Father irraa fite as galchi
+            let inviteUrl = `https://t.me/${botUsername}?startapp=${userId}`;
+            
+            // Telegram share dialog bifa kanaan fida
+            tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(inviteUrl)}&text=Mee%20Mini%20App%20kana%20fayyadamii%20Point%20hojjedhu!`);
+        }
+
+        // Helper Functions
+        function addPoints(amount) {
+            currentPoints += amount;
+            localStorage.setItem(balanceKey, currentPoints);
+            updateBalanceDisplay();
+        }
+
+        function updateBalanceDisplay() {
+            document.getElementById('balance').innerText = currentPoints.toLocaleString();
+        }
+
+        function setButtonDone(btnId) {
+            const btn = document.getElementById(btnId);
+            btn.innerText = "Claimed ✓";
+            btn.className = "btn-action btn-disabled";
             btn.onclick = null;
+        }
+
+        function checkDailyStatus() {
+            const todayStr = new Date().toDateString();
+            const btn = document.getElementById('claim-btn');
+            const txt = document.getElementById('claim-status');
+            
+            if (localStorage.getItem(dailyKey) === todayStr) {
+                btn.innerText = "Claimed";
+                btn.className = "btn-action btn-disabled";
+                txt.innerText = "Come back tomorrow!";
+                btn.onclick = null;
+            }
         }
     </script>
 </body>
