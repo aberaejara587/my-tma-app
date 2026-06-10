@@ -289,7 +289,7 @@
             <div class="stat-lbl">Ads Watched</div>
         </div>
         <div class="stat-box">
-            <div class="stat-val" id="v-today">0 / 8</div>
+            <div class="stat-val" id="v-today">0 / 50</div>
             <div class="stat-lbl">Today's Ads</div>
         </div>
         <div class="stat-box">
@@ -326,7 +326,7 @@
                 <h5>Web Visit 15s</h5>
                 <p>+$0.100</p>
             </div>
-            <button id="tsk-btn-1" class="btn-start" onclick="runTask(1, 15, 0.100)">Start</button>
+            <button id="tsk-btn-1" class="btn-start" onclick="runTask(1, 15, 0.100, 'https://google.com')">Start</button>
         </div>
 
         <div class="task-item">
@@ -334,7 +334,7 @@
                 <h5>Web Visit 30s</h5>
                 <p>+$0.100</p>
             </div>
-            <button id="tsk-btn-2" class="btn-start" onclick="runTask(2, 30, 0.100)">Start</button>
+            <button id="tsk-btn-2" class="btn-start" onclick="runTask(2, 30, 0.100, 'https://yahoo.com')">Start</button>
         </div>
 
         <div class="task-item">
@@ -342,7 +342,7 @@
                 <h5>Subscribe YouTube</h5>
                 <p>+$0.050</p>
             </div>
-            <button id="tsk-btn-3" class="btn-start" onclick="runTask(3, 10, 0.050)">Start</button>
+            <button id="tsk-btn-3" class="btn-start" onclick="runTask(3, 10, 0.050, 'https://youtube.com')">Start</button>
         </div>
 
         <div class="task-item">
@@ -350,7 +350,7 @@
                 <h5>Join Telegram Channel</h5>
                 <p>+$0.050</p>
             </div>
-            <button id="tsk-btn-4" class="btn-start" onclick="runTask(4, 5, 0.050)">Start</button>
+            <button id="tsk-btn-4" class="btn-start" onclick="runTask(4, 5, 0.050, 'https://t.me/telegram')">Start</button>
         </div>
     </div>
 
@@ -391,12 +391,10 @@
     </div>
 
     <script>
-        // Setup Telegram WebApp Interface
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
 
-        // Load User Details from Telegram
         let user = tg.initDataUnsafe.user;
         let userId = user ? user.id : "dev_guest";
         let firstName = user ? user.first_name : "User";
@@ -404,7 +402,6 @@
         document.getElementById('u-name').innerText = firstName;
         document.getElementById('u-avatar').innerText = firstName.charAt(0).toUpperCase();
 
-        // LocalStorage Persistent Data Key bindings
         const balKey = 'b_bal_' + userId;
         const watchKey = 'b_wat_' + userId;
         const todayKey = 'b_tdy_' + userId;
@@ -418,45 +415,47 @@
         function updateDashboard() {
             document.getElementById('v-balance').innerText = balance.toFixed(3);
             document.getElementById('v-watched').innerText = watchedCount;
-            document.getElementById('v-today').innerText = todayCount + " / 8";
+            document.getElementById('v-today').innerText = todayCount + " / 50";
             localStorage.setItem(balKey, balance);
             localStorage.setItem(watchKey, watchedCount);
             localStorage.setItem(todayKey, todayCount);
         }
 
-        // 🛠️ INTEGRATION ADSGRAM DHUGAA
-        // Block ID kee '34689' kanaan kallattiin uumameera
-        const AdsController = window.Adsgram.createAdListener({
-            blockId: "34689"
-        });
-
         // Action: Click Watch Ads (AdsGram Connective)
         function watchAdAction(reward, type) {
-            if (todayCount >= 8 && type === 'video') {
+            // Daangaan guyyaa gara 50'tti ol ka'eera akka sitti hin dhowwineef
+            if (todayCount >= 50 && type === 'video') {
                 tg.showAlert("Har'aaf Ad daawwattee xumurteetta! Bor deebi'i.");
                 return;
             }
 
-            // Beeksisa AdsGram kaachisuu
+            // Block ID kee 34689 as keessa jira
+            const AdsController = window.Adsgram.createAdListener({
+                blockId: "34689"
+            });
+
             AdsController.show().then((result) => {
-                // Yoo namni sun hanga dhumaatti daawwate qofa herregaaf dabalama
                 balance += reward;
                 watchedCount += 1;
                 if (type === 'video') todayCount += 1;
                 updateDashboard();
                 tg.showAlert(`🎁 Hojii Milkaa'aa! +$${reward.toFixed(3)} herrega keetti dabalameera.`);
             }).catch((result) => {
-                // Yoo Error uumame ykn namichi gidduutti addaan kute
-                tg.showAlert("⚠️ Beeksisa utuu hin xumurin addaan kutte ykn error uumame!");
+                tg.showAlert("⚠️ Beeksisa utuu hin xumurin addaan kutte ykn eeggachaa jikra!");
             });
         }
 
-        // Action: Manage Countdown timers for Microtasks
-        function runTask(id, seconds, reward) {
+        // Action: Manage Countdown timers for Microtasks with URL redirect
+        function runTask(id, seconds, reward, linkUrl) {
             const btn = document.getElementById(`tsk-btn-${id}`);
             btn.disabled = true;
-            let timeLeft = seconds;
             
+            // Linkii saaquuf
+            if (linkUrl) {
+                tg.openLink(linkUrl);
+            }
+            
+            let timeLeft = seconds;
             const interval = setInterval(() => {
                 if (timeLeft <= 0) {
                     clearInterval(interval);
@@ -471,12 +470,10 @@
             }, 1000);
         }
 
-        // Control Modal display toggle
         function toggleModal(show) {
             document.getElementById('withdraw-modal').style.display = show ? 'flex' : 'none';
         }
 
-        // Process Withdrawal requests
         function submitWithdraw(e) {
             e.preventDefault();
             if (balance < 5.00) {
@@ -488,7 +485,6 @@
             toggleModal(false);
         }
 
-        // Secondary Options features
         function inviteAction() {
             tg.openTelegramLink("https://t.me/share/url?url=https://t.me/birrx_premium_bot/earning&text=Kottu%20BirrX%20irratti%20kallattiin%20qarshii%20hojjedhu!");
         }
