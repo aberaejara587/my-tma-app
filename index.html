@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PayneX - Earn Premium App</title>
+    <title>BirrX - Earn Premium App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -34,7 +34,7 @@
         .avatar {
             width: 46px;
             height: 46px;
-            background-color: #111;
+            background-color: #a246ff;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -257,7 +257,7 @@
             font-size: 15px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(178, 94, 255, 0.3);
+            box-shadow: 0 4px 12 rgba(178, 94, 255, 0.3);
             margin-top: 8px;
         }
 
@@ -268,9 +268,9 @@
 
     <div class="profile-header">
         <div class="profile-left">
-            <div class="avatar" id="u-avatar">U</div>
+            <div class="avatar" id="u-avatar">B</div>
             <div class="user-text">
-                <h4>Welcome Back!</h4>
+                <h4>Welcome to BirrX!</h4>
                 <h2 id="u-name">Loading...</h2>
             </div>
         </div>
@@ -404,11 +404,11 @@
         document.getElementById('u-avatar').innerText = firstName.charAt(0).toUpperCase();
 
         // LocalStorage Persistent Data Key bindings
-        const balKey = 'p_bal_' + userId;
-        const watchKey = 'p_wat_' + userId;
-        const todayKey = 'p_tdy_' + userId;
+        const balKey = 'b_bal_' + userId;
+        const watchKey = 'b_wat_' + userId;
+        const todayKey = 'b_tdy_' + userId;
 
-        // Start purely from 0 if no local history exists
+        // Start purely from 0 for the brand new BirrX App
         let balance = parseFloat(localStorage.getItem(balKey)) || 0.000;
         let watchedCount = parseInt(localStorage.getItem(watchKey)) || 0;
         let todayCount = parseInt(localStorage.getItem(todayKey)) || 0;
@@ -477,7 +477,7 @@
 
         // Secondary Options features
         function inviteAction() {
-            tg.openTelegramLink("https://t.me/share/url?url=https://t.me/YOUR_BOT_USERNAME&text=Kottu%20PayneX%20irratti%20kallattiin%20qarshii%20hojjedhu!");
+            tg.openTelegramLink("https://t.me/share/url?url=https://t.me/birrx_premium_bot/earning&text=Kottu%20BirrX%20irratti%20kallattiin%20qarshii%20hojjedhu!");
         }
         function supportAction() {
             tg.showAlert("Support Center: Gargaarsaaf @Arsi_University qunnami.");
