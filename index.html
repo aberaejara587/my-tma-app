@@ -9,12 +9,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Premium Light Theme Style */
+        /* Premium Dark Theme Style */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
         
         body { 
-            background-color: #fcf8ff; 
-            color: #1d1b20; 
+            background-color: #0f0a1c; 
+            color: #f4effa; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
@@ -36,26 +36,26 @@
         .avatar {
             width: 46px;
             height: 46px;
-            background-color: #a246ff;
+            background-color: #bb86fc;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #120720;
             font-size: 18px;
             font-weight: 600;
         }
-        .user-text h4 { font-size: 13px; color: #65558f; font-weight: 500; }
-        .user-text h2 { font-size: 18px; font-weight: 700; color: #1d1b20; }
+        .user-text h4 { font-size: 13px; color: #b3a7d4; font-weight: 500; }
+        .user-text h2 { font-size: 18px; font-weight: 700; color: #f4effa; }
         .history-btn {
             width: 40px;
             height: 40px;
-            background: #f3edf7;
+            background: #251e35;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #49454f;
+            color: #cac4d0;
             cursor: pointer;
         }
 
@@ -63,12 +63,12 @@
         .balance-card {
             width: 100%;
             max-width: 420px;
-            background: linear-gradient(135deg, #f38eff 0%, #a246ff 100%);
+            background: linear-gradient(135deg, #a246ff 0%, #6200ee 100%);
             border-radius: 24px;
             padding: 24px;
             text-align: center;
             color: white;
-            box-shadow: 0 8px 24px rgba(162, 70, 255, 0.25);
+            box-shadow: 0 8px 24px rgba(162, 70, 255, 0.15);
             margin-bottom: 16px;
         }
         .balance-title { font-size: 14px; font-weight: 500; opacity: 0.9; margin-bottom: 4px; }
@@ -84,25 +84,25 @@
             margin-bottom: 24px;
         }
         .stat-box {
-            background: white;
+            background: #1d162e;
             border-radius: 16px;
             padding: 14px 8px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            border: 1px solid #f3edf7;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border: 1px solid #2d2344;
         }
-        .stat-val { font-size: 20px; font-weight: 700; color: #7f22ff; margin-bottom: 2px; }
-        .stat-lbl { font-size: 11px; color: #7a757f; font-weight: 500; }
+        .stat-val { font-size: 20px; font-weight: 700; color: #d0bcff; margin-bottom: 2px; }
+        .stat-lbl { font-size: 11px; color: #938f99; font-weight: 500; }
 
         /* Section Container */
         .section-container {
-            background: white;
+            background: #1d162e;
             border-radius: 24px;
             width: 100%;
             max-width: 420px;
             padding: 20px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.02);
-            border: 1px solid #f3edf7;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            border: 1px solid #2d2344;
             margin-bottom: 16px;
         }
         .section-title {
@@ -112,8 +112,9 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            color: #f4effa;
         }
-        .section-title i { color: #d0bcff; }
+        .section-title i { color: #b3a7d4; }
 
         /* Quick Actions Grid */
         .actions-grid {
@@ -123,29 +124,29 @@
             margin-bottom: 12px;
         }
         .action-card {
-            background: linear-gradient(135deg, #fceeff 0%, #f3daff 100%);
+            background: linear-gradient(135deg, #2d1b4e 0%, #1f103a 100%);
             border-radius: 16px;
             padding: 16px;
             text-align: center;
             cursor: pointer;
             transition: transform 0.2s;
-            border: none;
+            border: 1px solid #493971;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 8px;
         }
         .action-card:active { transform: scale(0.97); }
-        .action-card i { font-size: 20px; color: #1d1b20; }
-        .action-card span { font-size: 13px; font-weight: 600; color: #1d1b20; }
+        .action-card i { font-size: 20px; color: #d0bcff; }
+        .action-card span { font-size: 13px; font-weight: 600; color: #e6e1e5; }
         
         .withdraw-row {
             grid-column: span 2;
             width: 100%;
         }
         .btn-withdraw-trigger {
-            background: white;
-            border: 1px solid #e8def8;
+            background: #251e35;
+            border: 1px solid #493971;
             border-radius: 16px;
             padding: 16px;
             width: 100%;
@@ -155,30 +156,30 @@
             gap: 6px;
             cursor: pointer;
         }
-        .btn-withdraw-trigger i { color: #7f22ff; font-size: 20px; }
-        .btn-withdraw-trigger span { font-size: 13px; font-weight: 600; color: #1d1b20; }
+        .btn-withdraw-trigger i { color: #d0bcff; font-size: 20px; }
+        .btn-withdraw-trigger span { font-size: 13px; font-weight: 600; color: #e6e1e5; }
 
         /* Micro Tasks Rows */
         .task-item {
-            background: #fff;
-            border-left: 4px solid #d0bcff;
+            background: #251e35;
+            border-left: 4px solid #bb86fc;
             border-radius: 12px;
             padding: 14px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.01);
-            border-top: 1px solid #f6f0fa;
-            border-right: 1px solid #f6f0fa;
-            border-bottom: 1px solid #f6f0fa;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-top: 1px solid #2d2344;
+            border-right: 1px solid #2d2344;
+            border-bottom: 1px solid #2d2344;
         }
-        .task-info h5 { font-size: 14px; font-weight: 600; color: #1d1b20; }
-        .task-info p { font-size: 13px; color: #34c759; font-weight: 700; margin-top: 2px; }
+        .task-info h5 { font-size: 14px; font-weight: 600; color: #e6e1e5; }
+        .task-info p { font-size: 13px; color: #03dac6; font-weight: 700; margin-top: 2px; }
         
         .btn-start {
-            background: #d0bcff;
-            color: #381e72;
+            background: #bb86fc;
+            color: #120720;
             border: none;
             padding: 6px 16px;
             border-radius: 20px;
@@ -188,70 +189,71 @@
             min-width: 85px;
             text-align: center;
         }
-        .btn-start:disabled { background: #e8def8; color: #a8a0b0; cursor: not-allowed; }
+        .btn-start:disabled { background: #352d4a; color: #7a7485; cursor: not-allowed; }
 
         /* More Options Section */
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .options-grid .opt-box {
-            border: 1px solid #e8def8;
+            border: 1px solid #493971;
             border-radius: 16px;
             padding: 16px;
             text-align: center;
             cursor: pointer;
-            color: #49454f;
-            background: white;
+            color: #cac4d0;
+            background: #1d162e;
         }
-        .options-grid .opt-box i { font-size: 20px; color: #7f22ff; margin-bottom: 6px; display: block; }
+        .options-grid .opt-box i { font-size: 20px; color: #bb86fc; margin-bottom: 6px; display: block; }
         .options-grid .opt-box span { font-size: 13px; font-weight: 600; }
 
         /* Withdraw Modal */
         .modal-backdrop {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.7);
             display: none;
             align-items: center;
             justify-content: center;
             padding: 20px;
             z-index: 999;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(6px);
         }
         .modal {
-            background: white;
+            background: #1d162e;
+            border: 1px solid #493971;
             border-radius: 28px;
             width: 100%;
             max-width: 380px;
             padding: 24px;
             position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             animation: slideUp 0.3s ease-out;
         }
         .modal-close {
             position: absolute;
             top: 20px; right: 20px;
             font-size: 20px;
-            color: #49454f;
+            color: #cac4d0;
             cursor: pointer;
         }
-        .modal h3 { font-size: 20px; font-weight: 700; color: #1d1b20; margin-bottom: 8px; }
-        .modal p { font-size: 13px; color: #49454f; margin-bottom: 20px; }
+        .modal h3 { font-size: 20px; font-weight: 700; color: #f4effa; margin-bottom: 8px; }
+        .modal p { font-size: 13px; color: #ccc4d6; margin-bottom: 20px; }
         
         .form-select, .form-input {
             width: 100%;
-            background: #f7f2fa;
-            border: 1px solid #79747e;
+            background: #251e35;
+            border: 1px solid #493971;
             padding: 14px;
             border-radius: 12px;
             font-size: 14px;
             margin-bottom: 14px;
             outline: none;
-            color: #1d1b20;
+            color: #f4effa;
         }
-        .form-select:focus, .form-input:focus { border-color: #a246ff; background: white; }
+        .form-select:focus, .form-input:focus { border-color: #bb86fc; background: #1d162e; }
         
         .btn-submit {
             width: 100%;
-            background: linear-gradient(135deg, #f49aff 0%, #b25eff 100%);
+            background: linear-gradient(135deg, #bb86fc 0%, #6200ee 100%);
             color: white;
             border: none;
             padding: 14px;
@@ -259,7 +261,7 @@
             font-size: 15px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 120px rgba(178, 94, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(187, 134, 252, 0.2);
             margin-top: 8px;
         }
 
@@ -409,7 +411,6 @@
         const todayKey = 'bx_tdy_prod_' + userId;
         const taskStateKey = 'bx_tasks_prod_' + userId;
 
-        // Yeroo jalqabaa qofa siriinii kee irraa ka'ee $1.860 galcha, dhabama irraa ni ittisa
         let balance = localStorage.getItem(balKey) !== null ? parseFloat(localStorage.getItem(balKey)) : 1.860;
         let watchedCount = localStorage.getItem(watchKey) !== null ? parseInt(localStorage.getItem(watchKey)) : 28;
         let todayCount = localStorage.getItem(todayKey) !== null ? parseInt(localStorage.getItem(todayKey)) : 8;
@@ -423,7 +424,6 @@
             document.getElementById('v-watched').innerText = watchedCount;
             document.getElementById('v-today').innerText = todayCount + " / 50";
             
-            // Kuusaa jabaa
             localStorage.setItem(balKey, balance);
             localStorage.setItem(watchKey, watchedCount);
             localStorage.setItem(todayKey, todayCount);
@@ -436,31 +436,28 @@
                     if (btn) {
                         btn.innerText = "Claimed ✓";
                         btn.disabled = true;
-                        btn.style.background = "#e8def8";
-                        btn.style.color = "#a8a0b0";
+                        btn.style.background = "#352d4a";
+                        btn.style.color = "#7a7485";
                     }
                 }
             }
         }
 
-        // 🟢 OFFICIAL ADSGRAM INTEGRATION (Unka Haaraa Qajeelfama Keetii)
         function watchAdAction(reward, type) {
             if (todayCount >= 50 && type === 'video') {
                 tg.showAlert("Har'aaf Ad daawwattee xumurteetta! Bor deebi'i.");
                 return;
             }
 
-            // AdsGram fe'amaa jiraachuu isaa mirkaneessuu
             if (typeof window.Adsgram === 'undefined') {
                 tg.showAlert("⚠️ AdsGram fe'amaa jira, mee sekoondii muraasa booda deebisii yaali!");
                 return;
             }
 
-            // Qajeelfama haaraa irratti hundahuun window.Adsgram.init() fayyadamna
-            const AdController = window.Adsgram.init({ blockId: "32795" });
+            // 🟢 BLOCK ID HAARAA KAN KEETIITIIN BAKKA BU'EERA (34689)
+            const AdController = window.Adsgram.init({ blockId: "34689" });
 
             AdController.show().then((result) => {
-                // Beeksisa guutuu yoo xumuran qofa qarshiin dabalama
                 balance += reward;
                 watchedCount += 1;
                 if (type === 'video') todayCount += 1;
@@ -472,7 +469,6 @@
             });
         }
 
-        // Anti-cheat timer task'ota dhuunfaa
         function runTask(id, seconds, reward, linkUrl) {
             if (completedTasks[id]) return; 
 
@@ -497,8 +493,8 @@
                     
                     updateDashboard();
                     btn.innerText = "Claimed ✓";
-                    btn.style.background = "#e8def8";
-                    btn.style.color = "#a8a0b0";
+                    btn.style.background = "#352d4a";
+                    btn.style.color = "#7a7485";
                     tg.showAlert(`🎉 Task xumurteetta! +$${reward.toFixed(3)} siif dabalame.`);
                 } else {
                     btn.innerText = timeLeft + "s";
