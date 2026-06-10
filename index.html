@@ -3,361 +3,488 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Centric Earn - Telegram Mini App</title>
+    <title>PayneX - Earn Premium App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Modern Premium Theme Styling */
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        /* Base Setup & Premium Light Theme */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
         
         body { 
-            background: linear-gradient(180deg, #0f0f12 0%, #17171f 100%); 
-            color: #ffffff; 
+            background-color: #fcf8ff; 
+            color: #1d1b20; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             min-height: 100vh; 
-            padding: 20px;
-            overflow-x: hidden;
+            padding: 16px;
         }
 
-        /* Profile Header */
-        .header {
+        /* Top Profile Header */
+        .profile-header {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             width: 100%;
             max-width: 420px;
-            background: rgba(255, 255, 255, 0.04);
-            padding: 12px 16px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            margin-bottom: 25px;
-            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+            padding: 4px 8px;
         }
+        .profile-left { display: flex; align-items: center; gap: 12px; }
         .avatar {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, #007aff, #00c6ff);
+            width: 46px;
+            height: 46px;
+            background-color: #111;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            font-weight: bold;
-            margin-right: 12px;
-            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
-        }
-        .user-info h2 { font-size: 16px; font-weight: 600; color: #f5f5f7; }
-        .user-info p { font-size: 12px; color: #8e8e93; margin-top: 2px; }
-
-        /* Main Balance Area */
-        .balance-section { 
-            text-align: center;
-            margin-bottom: 30px;
-            animation: pulse 3s infinite alternate;
-        }
-        .balance-subtitle { font-size: 13px; color: #0a84ff; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 8px; }
-        .balance-amount { font-size: 48px; font-weight: 800; color: #ffd60a; display: flex; align-items: center; justify-content: center; gap: 10px; text-shadow: 0 0 20px rgba(255, 214, 10, 0.2); }
-        .balance-amount i { color: #ffd60a; font-size: 38px; }
-
-        /* Quick Action Grid (Claim Daily) */
-        .quick-actions {
-            width: 100%;
-            max-width: 420px;
-            margin-bottom: 25px;
-        }
-        .claim-card {
-            background: linear-gradient(135deg, #242430 0%, #1a1a24 100%);
-            border: 1px solid rgba(255, 214, 10, 0.2);
-            padding: 16px;
-            border-radius: 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-        }
-        .claim-text h4 { font-size: 15px; color: #ffffff; margin-bottom: 4px; }
-        .claim-text p { font-size: 12px; color: #ffd60a; font-weight: 600; }
-
-        /* Navigation Tabs */
-        .tab-container {
-            display: flex;
-            width: 100%;
-            max-width: 420px;
-            background: #1c1c24;
-            padding: 4px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .tab {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            font-size: 14px;
+            color: white;
+            font-size: 18px;
             font-weight: 600;
-            color: #8e8e93;
+        }
+        .user-text h4 { font-size: 13px; color: #65558f; font-weight: 500; }
+        .user-text h2 { font-size: 18px; font-weight: 700; color: #1d1b20; }
+        .history-btn {
+            width: 40px;
+            height: 40px;
+            background: #f3edf7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #49454f;
             cursor: pointer;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-        .tab.active {
-            background: #2c2c3c;
-            color: #ffffff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
-        /* Content List Container */
-        .content-section { width: 100%; max-width: 420px; }
-        
-        .task-list { display: none; }
-        .task-list.active { display: block; animation: fadeIn 0.4s ease; }
+        /* Main Balance Card (Beautiful Purple Gradient) */
+        .balance-card {
+            width: 100%;
+            max-width: 420px;
+            background: linear-gradient(135deg, #f38eff 0%, #a246ff 100%);
+            border-radius: 24px;
+            padding: 24px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 8px 24px rgba(162, 70, 255, 0.25);
+            margin-bottom: 16px;
+        }
+        .balance-title { font-size: 14px; font-weight: 500; opacity: 0.9; margin-bottom: 4px; }
+        .balance-amount { font-size: 42px; font-weight: 700; letter-spacing: -0.5px; }
 
-        /* Elegant Task Rows */
-        .task-row {
-            background: #1a1a24;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            padding: 16px;
+        /* Stats Grid Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            width: 100%;
+            max-width: 420px;
+            margin-bottom: 24px;
+        }
+        .stat-box {
+            background: white;
             border-radius: 16px;
+            padding: 14px 8px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 1px solid #f3edf7;
+        }
+        .stat-val { font-size: 20px; font-weight: 700; color: #7f22ff; margin-bottom: 2px; }
+        .stat-lbl { font-size: 11px; color: #7a757f; font-weight: 500; }
+
+        /* Main Container Cards */
+        .section-container {
+            background: white;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.02);
+            border: 1px solid #f3edf7;
+            margin-bottom: 16px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title i { color: #d0bcff; }
+
+        /* Quick Actions Grid layout */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .action-card {
+            background: linear-gradient(135deg, #fceeff 0%, #f3daff 100%);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .action-card:active { transform: scale(0.97); }
+        .action-card i { font-size: 20px; color: #1d1b20; }
+        .action-card span { font-size: 13px; font-weight: 600; color: #1d1b20; }
+        
+        /* Full Width Withdraw Button Row inside container */
+        .withdraw-row {
+            grid-column: span 2;
+            width: 100%;
+        }
+        .btn-withdraw-trigger {
+            background: white;
+            border: 1px solid #e8def8;
+            border-radius: 16px;
+            padding: 16px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        .btn-withdraw-trigger i { color: #7f22ff; font-size: 20px; }
+        .btn-withdraw-trigger span { font-size: 13px; font-weight: 600; color: #1d1b20; }
+
+        /* Micro Tasks Row Styling */
+        .task-item {
+            background: #fff;
+            border-left: 4px solid #d0bcff;
+            border-radius: 12px;
+            padding: 14px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
-            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+            border-top: 1px solid #f6f0fa;
+            border-right: 1px solid #f6f0fa;
+            border-bottom: 1px solid #f6f0fa;
         }
-        .task-row:hover { border-color: rgba(0, 122, 255, 0.3); }
+        .task-info h5 { font-size: 14px; font-weight: 600; color: #1d1b20; }
+        .task-info p { font-size: 13px; color: #34c759; font-weight: 700; margin-top: 2px; }
+        .task-info span { font-size: 11px; color: #e65100; background: #fff3e0; padding: 2px 6px; border-radius: 6px; font-weight: bold; margin-left: 4px; }
         
-        .task-left { display: flex; align-items: center; }
-        .task-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            display: flex;
+        .btn-start {
+            background: #d0bcff;
+            color: #381e72;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .btn-start:disabled { background: #e8def8; color: #a8a0b0; cursor: not-allowed; }
+
+        /* More Options Grid */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .opt-box {
+            border: 1px solid #e8def8;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            color: #49454f;
+            background: white;
+        }
+        .opt-box i { font-size: 20px; color: #7f22ff; margin-bottom: 6px; display: block; }
+        .opt-box span { font-size: 13px; font-weight: 600; }
+
+        /* Premium Modal Backdrop */
+        .modal-backdrop {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: none;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
-            color: #0a84ff;
-            margin-right: 14px;
+            padding: 20px;
+            z-index: 999;
+            backdrop-filter: blur(4px);
         }
-        .task-icon.yt { color: #ff453a; }
-        .task-icon.ref { color: #30d158; }
-
-        .task-details h5 { font-size: 14px; font-weight: 600; color: #ffffff; margin-bottom: 4px; }
-        .task-details p { font-size: 13px; color: #34c759; font-weight: 700; display: flex; align-items: center; gap: 4px; }
-
-        /* Premium Buttons */
-        .btn-action { 
-            background: #007aff; 
-            color: white; 
-            border: none; 
-            padding: 10px 18px; 
-            font-size: 13px; 
-            font-weight: 700;
-            border-radius: 10px; 
+        .modal {
+            background: white;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 380px;
+            padding: 24px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            animation: slideUp 0.3s ease-out;
+        }
+        .modal-close {
+            position: absolute;
+            top: 20px; right: 20px;
+            font-size: 20px;
+            color: #49454f;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.2);
         }
-        .btn-action:active { transform: scale(0.95); }
+        .modal h3 { font-size: 20px; font-weight: 700; color: #1d1b20; margin-bottom: 8px; }
+        .modal p { font-size: 13px; color: #49454f; margin-bottom: 20px; }
         
-        .btn-claim { background: linear-gradient(135deg, #ffd60a, #ff9f0a); color: #000000; box-shadow: 0 4px 14px rgba(255, 214, 10, 0.3); }
-        .btn-disabled { background: #2c2c35 !important; color: #7c7c85 !important; cursor: not-allowed; box-shadow: none; }
+        /* Form Inputs Inside Modal */
+        .form-select, .form-input {
+            width: 100%;
+            background: #f7f2fa;
+            border: 1px solid #79747e;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-bottom: 14px;
+            outline: none;
+            color: #1d1b20;
+        }
+        .form-select:focus, .form-input:focus { border-color: #a246ff; background: white; }
+        
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #f49aff 0%, #b25eff 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(178, 94, 255, 0.3);
+            margin-top: 8px;
+        }
 
-        /* Animations */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.02); } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="avatar" id="avatar-letter">U</div>
-        <div class="user-info">
-            <h2 id="username">Loading User...</h2>
-            <p><i class="fa-solid fa-fingerprint"></i> ID: <span id="user-id-val">00000000</span></p>
-        </div>
-    </div>
-
-    <div class="balance-section">
-        <p class="balance-subtitle">Total Balance</p>
-        <h1 class="balance-amount"><i class="fa-solid fa-coins"></i> <span id="balance">0</span></h1>
-    </div>
-
-    <div class="quick-actions">
-        <div class="claim-card">
-            <div class="claim-text">
-                <h4>Daily Check-in Reward</h4>
-                <p id="claim-status">+100 PTS Ready to claim</p>
+    <div class="profile-header">
+        <div class="profile-left">
+            <div class="avatar" id="u-avatar">A</div>
+            <div class="user-text">
+                <h4>Welcome Back!</h4>
+                <h2 id="u-name">Abera</h2>
             </div>
-            <button id="claim-btn" class="btn-action btn-claim" onclick="claimDaily()">Claim</button>
+        </div>
+        <div class="history-btn" onclick="openHistory()"><i class="fa-solid fa-clock-rotate-left"></i></div>
+    </div>
+
+    <div class="balance-card">
+        <p class="balance-title">Your Total Balance</p>
+        <h1 class="balance-amount">$<span id="v-balance">2.140</span></h1>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-box">
+            <div class="stat-val" id="v-watched">16</div>
+            <div class="stat-lbl">Ads Watched</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-val" id="v-today">0 / 8</div>
+            <div class="stat-lbl">Today's Ads</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-val">0</div>
+            <div class="stat-lbl">Referrals</div>
         </div>
     </div>
 
-    <div class="tab-container">
-        <div id="tab-tasks" class="tab active" onclick="switchTab('tasks')"><i class="fa-solid fa-list-check"></i> Tasks</div>
-        <div id="tab-frens" class="tab" onclick="switchTab('frens')"><i class="fa-solid fa-users"></i> Frens</div>
+    <div class="section-container">
+        <div class="section-title"><i class="fa-solid fa-rocket"></i> Quick Actions</div>
+        <div class="actions-grid">
+            <button class="action-card" onclick="watchAdAction(0.02)">
+                <i class="fa-solid fa-circle-play"></i>
+                <span>Watch Ad</span>
+            </button>
+            <button class="action-card" onclick="watchAdAction(0.05)">
+                <i class="fa-solid fa-bolt"></i>
+                <span>Watch Popup (0/10)</span>
+            </button>
+            <div class="withdraw-row">
+                <button class="btn-withdraw-trigger" onclick="toggleModal(true)">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>Withdraw</span>
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div class="content-section">
+    <div class="section-container">
+        <div class="section-title"><i class="fa-solid fa-list-ul"></i> Daily Micro Tasks</div>
         
-        <div id="list-tasks" class="task-list active">
-            <div class="task-row">
-                <div class="task-left">
-                    <div class="task-icon"><i class="fa-brands fa-telegram"></i></div>
-                    <div class="task-details">
-                        <h5>Join Our Channel</h5>
-                        <p>+150 PTS</p>
-                    </div>
-                </div>
-                <button id="t-tg-btn" class="btn-action" onclick="doTelegramTask()">Start</button>
+        <div class="task-item">
+            <div class="task-info">
+                <h5>Web Visit 15s</h5>
+                <p>+$0.100</p>
             </div>
-
-            <div class="task-row">
-                <div class="task-left">
-                    <div class="task-icon yt"><i class="fa-brands fa-youtube"></i></div>
-                    <div class="task-details">
-                        <h5>Watch YouTube Video</h5>
-                        <p>+100 PTS</p>
-                    </div>
-                </div>
-                <button id="t-yt-btn" class="btn-action" onclick="doVideoTask()">Watch</button>
-            </div>
+            <button id="tsk-btn-1" class="btn-start" onclick="runTask(1, 15, 0.100)">Start</button>
         </div>
 
-        <div id="list-frens" class="task-list">
-            <div class="task-row">
-                <div class="task-left">
-                    <div class="task-icon ref"><i class="fa-solid fa-user-plus"></i></div>
-                    <div class="task-details">
-                        <h5>Invite a Friend</h5>
-                        <p>+500 PTS per fren</p>
-                    </div>
-                </div>
-                <button class="btn-action" onclick="inviteFren()">Invite</button>
+        <div class="task-item">
+            <div class="task-info">
+                <h5>Web Visit 30s</h5>
+                <p>+$0.100</p>
             </div>
+            <button id="tsk-btn-2" class="btn-start" onclick="runTask(2, 30, 0.100)">Start</button>
+        </div>
+
+        <div class="task-item">
+            <div class="task-info">
+                <h5>Subscribe YouTube</h5>
+                <p>+$0.050</p>
+            </div>
+            <button id="tsk-btn-3" class="btn-start" onclick="runTask(3, 10, 0.050)">Start</button>
+        </div>
+
+        <div class="task-item">
+            <div class="task-info">
+                <h5>Join Telegram Channel</h5>
+                <p>+$0.050</p>
+            </div>
+            <button id="tsk-btn-4" class="btn-start" onclick="runTask(4, 5, 0.050)">Start</button>
+        </div>
+    </div>
+
+    <div class="section-container" style="background:transparent; border:none; padding:0; box-shadow:none;">
+        <div class="section-title" style="padding-left:4px;"><i class="fa-solid fa-circle-info"></i> More Options</div>
+        <div class="options-grid">
+            <div class="opt-box" onclick="inviteAction()">
+                <i class="fa-solid fa-user-plus"></i>
+                <span>Invite</span>
+            </div>
+            <div class="opt-box" onclick="supportAction()">
+                <i class="fa-solid fa-headset"></i>
+                <span>Support</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="withdraw-modal">
+        <div class="modal">
+            <i class="fa-solid fa-xmark modal-close" onclick="toggleModal(false)"></i>
+            <h3>Withdraw Funds</h3>
+            <p>Minimum withdrawal is $5.00.</p>
             
-            <div style="text-align: center; color: #8e8e93; font-size: 13px; margin-top: 20px; padding: 10px;">
-                <p><i class="fa-solid fa-info-circle"></i> LocalStorage mode active. Friends tracking requires integration.</p>
-            </div>
+            <form id="withdraw-form" onsubmit="submitWithdraw(event)">
+                <select class="form-select" required>
+                    <option value="" disabled selected>Select Payment Method</option>
+                    <option value="binance">Binance Pay (USDT)</option>
+                    <option value="ton">TON Wallet</option>
+                    <option value="telebirr">Telebirr</option>
+                </select>
+                
+                <input type="text" class="form-input" placeholder="Enter Account Number/Wallet address" required>
+                <input type="number" step="0.001" class="form-input" placeholder="Amount in USD" required>
+                
+                <button type="submit" class="btn-submit">Submit Request</button>
+            </form>
         </div>
-
     </div>
 
     <script>
-        // Setup Telegram WebApp
+        // Setup Telegram WebApp Interface
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
 
-        // Fetch User Elements
+        // Load User Details from Telegram
         let user = tg.initDataUnsafe.user;
-        let userId = user ? user.id : "guest_developer";
-        let uName = user ? user.first_name : "Centric User";
+        let userId = user ? user.id : "dev_guest";
+        let firstName = user ? user.first_name : "Abera";
 
-        // Display Profile Info
-        document.getElementById('username').innerText = uName;
-        document.getElementById('user-id-val').innerText = userId;
-        document.getElementById('avatar-letter').innerText = uName.charAt(0).toUpperCase();
+        document.getElementById('u-name').innerText = firstName;
+        document.getElementById('u-avatar').innerText = firstName.charAt(0).toUpperCase();
 
-        // Local Storage Keys setup
-        const balanceKey = 'centric_bal_' + userId;
-        const tgTaskKey = 'centric_task_tg_' + userId;
-        const ytTaskKey = 'centric_task_yt_' + userId;
-        const dailyKey = 'centric_daily_' + userId;
+        // LocalStorage Persistent Data Key bindings
+        const balKey = 'p_bal_' + userId;
+        const watchKey = 'p_wat_' + userId;
+        const todayKey = 'p_tdy_' + userId;
 
-        // Load Points
-        let currentPoints = parseInt(localStorage.getItem(balanceKey)) || 0;
-        updateBalanceDisplay();
+        // Initialize values from storage or setup starting defaults
+        let balance = parseFloat(localStorage.getItem(balKey)) || 2.140;
+        let watchedCount = parseInt(localStorage.getItem(watchKey)) || 16;
+        let todayCount = parseInt(localStorage.getItem(todayKey)) || 0;
 
-        // Check Completed Tasks on startup
-        if (localStorage.getItem(tgTaskKey) === 'done') setButtonDone('t-tg-btn');
-        if (localStorage.getItem(ytTaskKey) === 'done') setButtonDone('t-yt-btn');
-        checkDailyStatus();
+        updateDashboard();
 
-        // Navigation tab swapper
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.task-list').forEach(l => l.classList.remove('active'));
-            
-            if (tabName === 'tasks') {
-                document.getElementById('tab-tasks').classList.add('active');
-                document.getElementById('list-tasks').classList.add('active');
-            } else {
-                document.getElementById('tab-frens').classList.add('active');
-                document.getElementById('list-frens').classList.add('active');
+        // Update DOM elements helper function
+        function updateDashboard() {
+            document.getElementById('v-balance').innerText = balance.toFixed(3);
+            document.getElementById('v-watched').innerText = watchedCount;
+            document.getElementById('v-today').innerText = todayCount + " / 8";
+            localStorage.setItem(balKey, balance);
+            localStorage.setItem(watchKey, watchedCount);
+            localStorage.setItem(todayKey, todayCount);
+        }
+
+        // Action: Click Watch Ads
+        function watchAdAction(reward) {
+            if (todayCount >= 8 && reward === 0.02) {
+                tg.showAlert("Har'aaf Ad daawwattee xumurteetta! Bor deebi'i.");
+                return;
             }
+            balance += reward;
+            watchedCount += 1;
+            if (reward === 0.02) todayCount += 1;
+            updateDashboard();
+            tg.showAlert(`🎁 Hojii Milkaa'aa! +$${reward.toFixed(3)} herrega keetti dabalameera.`);
         }
 
-        // Action: Telegram Task
-        function doTelegramTask() {
-            if (localStorage.getItem(tgTaskKey) === 'done') return;
-            tg.openTelegramLink('https://t.me/Arsi_University'); // Link channel keetii as seensi
+        // Action: Manage Countdown timers for Microtasks
+        function runTask(id, seconds, reward) {
+            const btn = document.getElementById(`tsk-btn-${id}`);
+            btn.disabled = true;
+            let timeLeft = seconds;
             
-            addPoints(150);
-            localStorage.setItem(tgTaskKey, 'done');
-            setButtonDone('t-tg-btn');
+            const interval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    balance += reward;
+                    updateDashboard();
+                    btn.innerText = "Claimed ✓";
+                    tg.showAlert(`🎉 Task xumurteetta! +$${reward.toFixed(3)} siif dabalame.`);
+                } else {
+                    btn.innerText = timeLeft + "s";
+                    timeLeft--;
+                }
+            }, 1000);
         }
 
-        // Action: Video Task
-        function doVideoTask() {
-            if (localStorage.getItem(ytTaskKey) === 'done') return;
-            tg.showAlert("Video daawwattee xumurteetta! +100 PTS.");
-            
-            addPoints(100);
-            localStorage.setItem(ytTaskKey, 'done');
-            setButtonDone('t-yt-btn');
+        // Control Modal display toggle
+        function toggleModal(show) {
+            document.getElementById('withdraw-modal').style.display = show ? 'flex' : 'none';
         }
 
-        // Action: Daily Claim
-        function claimDaily() {
-            const todayStr = new Date().toDateString();
-            if (localStorage.getItem(dailyKey) === todayStr) return;
-
-            addPoints(100);
-            localStorage.setItem(dailyKey, todayStr);
-            checkDailyStatus();
-            tg.showAlert("🎁 Daily check-in +100 PTS argatteetta!");
-        }
-
-        // Action: Invite Link
-        function inviteFren() {
-            let botUsername = "YOUR_BOT_USERNAME"; // Maqaa Bot keetii kan @Father irraa fite as galchi
-            let inviteUrl = `https://t.me/${botUsername}?startapp=${userId}`;
-            
-            // Telegram share dialog bifa kanaan fida
-            tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(inviteUrl)}&text=Mee%20Mini%20App%20kana%20fayyadamii%20Point%20hojjedhu!`);
-        }
-
-        // Helper Functions
-        function addPoints(amount) {
-            currentPoints += amount;
-            localStorage.setItem(balanceKey, currentPoints);
-            updateBalanceDisplay();
-        }
-
-        function updateBalanceDisplay() {
-            document.getElementById('balance').innerText = currentPoints.toLocaleString();
-        }
-
-        function setButtonDone(btnId) {
-            const btn = document.getElementById(btnId);
-            btn.innerText = "Claimed ✓";
-            btn.className = "btn-action btn-disabled";
-            btn.onclick = null;
-        }
-
-        function checkDailyStatus() {
-            const todayStr = new Date().toDateString();
-            const btn = document.getElementById('claim-btn');
-            const txt = document.getElementById('claim-status');
-            
-            if (localStorage.getItem(dailyKey) === todayStr) {
-                btn.innerText = "Claimed";
-                btn.className = "btn-action btn-disabled";
-                txt.innerText = "Come back tomorrow!";
-                btn.onclick = null;
+        // Process Withdrawal requests
+        function submitWithdraw(e) {
+            e.preventDefault();
+            if (balance < 5.00) {
+                tg.showAlert("⚠️ Dogoggora: Qarri kee minimum withdrawal ($5.00) hin geenye!");
+                toggleModal(false);
+                return;
             }
+            tg.showAlert("✅ Gaaffiin kee milkaa'inaan fudhatameera. Hanga sa'aatii 24 keessatti siif ergama.");
+            toggleModal(false);
+        }
+
+        // Secondary Options features
+        function inviteAction() {
+            tg.openTelegramLink("https://t.me/share/url?url=https://t.me/YOUR_BOT_USERNAME&text=Kottu%20PayneX%20irratti%20kallattiin%20qarshii%20hojjedhu!");
+        }
+        function supportAction() {
+            tg.showAlert("Support Center: Gargaarsaaf @Arsi_University qunnami.");
+        }
+        function openHistory() {
+            tg.showAlert("Kallattiin galmee herrega keetii (History) dhiyoo kanatti ni banama!");
         }
     </script>
 </body>
