@@ -57,7 +57,7 @@
             cursor: pointer;
         }
 
-        /* Main Balance Card (Beautiful Purple Gradient) */
+        /* Main Balance Card */
         .balance-card {
             width: 100%;
             max-width: 420px;
@@ -137,7 +137,6 @@
         .action-card i { font-size: 20px; color: #1d1b20; }
         .action-card span { font-size: 13px; font-weight: 600; color: #1d1b20; }
         
-        /* Full Width Withdraw Button Row inside container */
         .withdraw-row {
             grid-column: span 2;
             width: 100%;
@@ -184,12 +183,14 @@
             font-size: 13px;
             font-weight: 700;
             cursor: pointer;
+            min-width: 80px;
+            text-align: center;
         }
         .btn-start:disabled { background: #e8def8; color: #a8a0b0; cursor: not-allowed; }
 
         /* More Options Grid */
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .opt-box {
+        .options-grid .opt-box {
             border: 1px solid #e8def8;
             border-radius: 16px;
             padding: 16px;
@@ -198,8 +199,8 @@
             color: #49454f;
             background: white;
         }
-        .opt-box i { font-size: 20px; color: #7f22ff; margin-bottom: 6px; display: block; }
-        .opt-box span { font-size: 13px; font-weight: 600; }
+        .options-grid .opt-box i { font-size: 20px; color: #7f22ff; margin-bottom: 6px; display: block; }
+        .options-grid .opt-box span { font-size: 13px; font-weight: 600; }
 
         /* Premium Modal Backdrop */
         .modal-backdrop {
@@ -233,7 +234,7 @@
         .modal h3 { font-size: 20px; font-weight: 700; color: #1d1b20; margin-bottom: 8px; }
         .modal p { font-size: 13px; color: #49454f; margin-bottom: 20px; }
         
-        /* Form Inputs Inside Modal */
+        /* Form Inputs */
         .form-select, .form-input {
             width: 100%;
             background: #f7f2fa;
@@ -396,7 +397,6 @@
         tg.ready();
         tg.expand();
 
-        // 🟢 UserID sirriitti mirkaneessuu (Guest akka hin taaneef)
         let user = tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
         let userId = user && user.id ? user.id : "birrx_user_prod"; 
         let firstName = user && user.first_name ? user.first_name : "User";
@@ -407,17 +407,21 @@
         const balKey = 'b_bal_' + userId;
         const watchKey = 'b_wat_' + userId;
         const todayKey = 'b_tdy_' + userId;
+        const taskStateKey = 'b_tasks_' + userId; // Task'f kan ka'ame
 
         let balance = parseFloat(localStorage.getItem(balKey)) || 0.000;
         let watchedCount = parseInt(localStorage.getItem(watchKey)) || 0;
         let todayCount = parseInt(localStorage.getItem(todayKey)) || 0;
+        
+        // Task state qabachuuf json parse goona
+        let completedTasks = JSON.parse(localStorage.getItem(taskStateKey)) || {};
 
-        // Balance kee inni duraa ($1.960) sun jalqaba irratti 0 ta'ee akka sitti hin banneef:
         if (balance === 0 && watchedCount === 0) { 
             balance = 1.960; 
         } 
 
         updateDashboard();
+        checkTaskStates(); // Jalqaba irratti task status mirkaneessuu
 
         function updateDashboard() {
             document.getElementById('v-balance').innerText = balance.toFixed(3);
@@ -428,19 +432,30 @@
             localStorage.setItem(todayKey, todayCount);
         }
 
+        // Kanaan dura kan hojjetame yoo ta'e 'Claimed' gochuu
+        function checkTaskStates() {
+            for (let id in completedTasks) {
+                if (completedTasks[id] === true) {
+                    const btn = document.getElementById(`tsk-btn-${id}`);
+                    if (btn) {
+                        btn.innerText = "Claimed ✓";
+                        btn.disabled = true;
+                    }
+                }
+            }
+        }
+
         function watchAdAction(reward, type) {
             if (todayCount >= 50 && type === 'video') {
                 tg.showAlert("Har'aaf Ad daawwattee xumurteetta! Bor deebi'i.");
                 return;
             }
 
-            // 🟢 AdsGram Check (Kallattiin script fe'amuu isaa ilaaluu)
             if (typeof window.Adsgram === 'undefined') {
                 tg.showAlert("⚠️ AdsGram fe'amaa jira, mee sekoondii muraasa booda deebisii yaali!");
                 return;
             }
 
-            // Kallattiin asitti beeksisa uumna akka race condition hin uumamneef
             const AdsController = window.Adsgram.createAdListener({ blockId: "34689" });
 
             AdsController.show().then((result) => {
@@ -455,7 +470,7 @@
             });
         }
 
-        // Action: Manage Countdown timers for Microtasks with URL redirect
+        // 🟢 Micro Task amansiisaa ta'e (Anti-cheat timer wajjin)
         function runTask(id, seconds, reward, linkUrl) {
             const btn = document.getElementById(`tsk-btn-${id}`);
             btn.disabled = true;
@@ -465,16 +480,24 @@
             }
             
             let timeLeft = seconds;
+            btn.innerText = timeLeft + "s";
+
             const interval = setInterval(() => {
+                timeLeft--;
                 if (timeLeft <= 0) {
                     clearInterval(interval);
+                    
+                    // Gidduutti herrega itti dabaluu fi galmeessuu
                     balance += reward;
+                    completedTasks[id] = true; // Task kun hojjetameera jedhanii galmeessuu
+                    localStorage.setItem(taskStateKey, JSON.stringify(completedTasks));
+                    
                     updateDashboard();
                     btn.innerText = "Claimed ✓";
+                    btn.disabled = true;
                     tg.showAlert(`🎉 Task xumurteetta! +$${reward.toFixed(3)} siif dabalame.`);
                 } else {
                     btn.innerText = timeLeft + "s";
-                    timeLeft--;
                 }
             }, 1000);
         }
