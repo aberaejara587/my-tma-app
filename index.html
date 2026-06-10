@@ -396,9 +396,10 @@
         tg.ready();
         tg.expand();
 
-        let user = tg.initDataUnsafe.user;
-        let userId = user ? user.id : "dev_guest";
-        let firstName = user ? user.first_name : "User";
+        // 🟢 UserID sirriitti mirkaneessuu (Guest akka hin taaneef)
+        let user = tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
+        let userId = user && user.id ? user.id : "birrx_user_prod"; 
+        let firstName = user && user.first_name ? user.first_name : "User";
 
         document.getElementById('u-name').innerText = firstName;
         document.getElementById('u-avatar').innerText = firstName.charAt(0).toUpperCase();
@@ -411,6 +412,11 @@
         let watchedCount = parseInt(localStorage.getItem(watchKey)) || 0;
         let todayCount = parseInt(localStorage.getItem(todayKey)) || 0;
 
+        // Balance kee inni duraa ($1.960) sun jalqaba irratti 0 ta'ee akka sitti hin banneef:
+        if (balance === 0 && watchedCount === 0) { 
+            balance = 1.960; 
+        } 
+
         updateDashboard();
 
         function updateDashboard() {
@@ -422,21 +428,21 @@
             localStorage.setItem(todayKey, todayCount);
         }
 
-        // 🛠️ Global Ad Controller (Takka qofa initialize ta'a akka koodiin sitti hin dogoggorreef)
-        const AdsController = window.Adsgram ? window.Adsgram.createAdListener({ blockId: "34689" }) : null;
-
         function watchAdAction(reward, type) {
             if (todayCount >= 50 && type === 'video') {
                 tg.showAlert("Har'aaf Ad daawwattee xumurteetta! Bor deebi'i.");
                 return;
             }
 
-            if (!AdsController) {
-                tg.showAlert("⚠️ AdsGram fe'amaa jira, mee sekoondii muraasa booda yaali!");
+            // 🟢 AdsGram Check (Kallattiin script fe'amuu isaa ilaaluu)
+            if (typeof window.Adsgram === 'undefined') {
+                tg.showAlert("⚠️ AdsGram fe'amaa jira, mee sekoondii muraasa booda deebisii yaali!");
                 return;
             }
 
-            // Kallattiin beeksisa fiduu
+            // Kallattiin asitti beeksisa uumna akka race condition hin uumamneef
+            const AdsController = window.Adsgram.createAdListener({ blockId: "34689" });
+
             AdsController.show().then((result) => {
                 balance += reward;
                 watchedCount += 1;
@@ -445,7 +451,7 @@
                 tg.showAlert(`🎁 Hojii Milkaa'aa! +$${reward.toFixed(3)} herrega keetti dabalameera.`);
             }).catch((result) => {
                 console.log("AdsGram info:", result);
-                tg.showAlert("⚠️ Beeksisa utuu hin xumurin addaan kutte ykn daangaan beeksisaa biyya keetti dhumateera (No Ads Available).");
+                tg.showAlert("⚠️ Beeksisa utuu hin xumurin addaan kutte ykn daangaan beeksisaa biyya keetti dhumateera (No Ads Available). Mee VPN saaqii yaali.");
             });
         }
 
