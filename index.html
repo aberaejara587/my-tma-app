@@ -174,7 +174,6 @@
         }
         .task-info h5 { font-size: 14px; font-weight: 600; color: #1d1b20; }
         .task-info p { font-size: 13px; color: #34c759; font-weight: 700; margin-top: 2px; }
-        .task-info span { font-size: 11px; color: #e65100; background: #fff3e0; padding: 2px 6px; border-radius: 6px; font-weight: bold; margin-left: 4px; }
         
         .btn-start {
             background: #d0bcff;
@@ -269,10 +268,10 @@
 
     <div class="profile-header">
         <div class="profile-left">
-            <div class="avatar" id="u-avatar">A</div>
+            <div class="avatar" id="u-avatar">U</div>
             <div class="user-text">
                 <h4>Welcome Back!</h4>
-                <h2 id="u-name">Abera</h2>
+                <h2 id="u-name">Loading...</h2>
             </div>
         </div>
         <div class="history-btn" onclick="openHistory()"><i class="fa-solid fa-clock-rotate-left"></i></div>
@@ -280,12 +279,12 @@
 
     <div class="balance-card">
         <p class="balance-title">Your Total Balance</p>
-        <h1 class="balance-amount">$<span id="v-balance">2.140</span></h1>
+        <h1 class="balance-amount">$<span id="v-balance">0.000</span></h1>
     </div>
 
     <div class="stats-grid">
         <div class="stat-box">
-            <div class="stat-val" id="v-watched">16</div>
+            <div class="stat-val" id="v-watched">0</div>
             <div class="stat-lbl">Ads Watched</div>
         </div>
         <div class="stat-box">
@@ -301,13 +300,13 @@
     <div class="section-container">
         <div class="section-title"><i class="fa-solid fa-rocket"></i> Quick Actions</div>
         <div class="actions-grid">
-            <button class="action-card" onclick="watchAdAction(0.02)">
+            <button class="action-card" onclick="watchAdAction(0.020)">
                 <i class="fa-solid fa-circle-play"></i>
                 <span>Watch Ad</span>
             </button>
-            <button class="action-card" onclick="watchAdAction(0.05)">
+            <button class="action-card" onclick="watchAdAction(0.050)">
                 <i class="fa-solid fa-bolt"></i>
-                <span>Watch Popup (0/10)</span>
+                <span>Watch Popup</span>
             </button>
             <div class="withdraw-row">
                 <button class="btn-withdraw-trigger" onclick="toggleModal(true)">
@@ -382,7 +381,7 @@
                     <option value="telebirr">Telebirr</option>
                 </select>
                 
-                <input type="text" class="form-input" placeholder="Enter Account Number/Wallet address" required>
+                <input type="text" class="form-input" placeholder="Enter Account/Wallet address" required>
                 <input type="number" step="0.001" class="form-input" placeholder="Amount in USD" required>
                 
                 <button type="submit" class="btn-submit">Submit Request</button>
@@ -399,7 +398,7 @@
         // Load User Details from Telegram
         let user = tg.initDataUnsafe.user;
         let userId = user ? user.id : "dev_guest";
-        let firstName = user ? user.first_name : "Abera";
+        let firstName = user ? user.first_name : "User";
 
         document.getElementById('u-name').innerText = firstName;
         document.getElementById('u-avatar').innerText = firstName.charAt(0).toUpperCase();
@@ -409,9 +408,9 @@
         const watchKey = 'p_wat_' + userId;
         const todayKey = 'p_tdy_' + userId;
 
-        // Initialize values from storage or setup starting defaults
-        let balance = parseFloat(localStorage.getItem(balKey)) || 2.140;
-        let watchedCount = parseInt(localStorage.getItem(watchKey)) || 16;
+        // Start purely from 0 if no local history exists
+        let balance = parseFloat(localStorage.getItem(balKey)) || 0.000;
+        let watchedCount = parseInt(localStorage.getItem(watchKey)) || 0;
         let todayCount = parseInt(localStorage.getItem(todayKey)) || 0;
 
         updateDashboard();
@@ -428,13 +427,13 @@
 
         // Action: Click Watch Ads
         function watchAdAction(reward) {
-            if (todayCount >= 8 && reward === 0.02) {
+            if (todayCount >= 8 && reward === 0.020) {
                 tg.showAlert("Har'aaf Ad daawwattee xumurteetta! Bor deebi'i.");
                 return;
             }
             balance += reward;
             watchedCount += 1;
-            if (reward === 0.02) todayCount += 1;
+            if (reward === 0.020) todayCount += 1;
             updateDashboard();
             tg.showAlert(`🎁 Hojii Milkaa'aa! +$${reward.toFixed(3)} herrega keetti dabalameera.`);
         }
