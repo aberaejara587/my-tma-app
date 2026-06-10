@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BirrX - Earn Premium App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         /* Premium Light Theme Style */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
@@ -285,11 +286,11 @@
 
     <div class="stats-grid">
         <div class="stat-box">
-            <div class="stat-val" id="v-watched">0</div>
+            <div class="stat-val" id="v-watched">28</div>
             <div class="stat-lbl">Ads Watched</div>
         </div>
         <div class="stat-box">
-            <div class="stat-val" id="v-today">0 / 50</div>
+            <div class="stat-val" id="v-today">8 / 50</div>
             <div class="stat-lbl">Today's Ads</div>
         </div>
         <div class="stat-box">
@@ -390,33 +391,30 @@
         </div>
     </div>
 
-    <script src="https://sad.adsgram.ai/js/advshare.bundle.js"></script>
-
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
 
         let user = tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
-        let userId = user && user.id ? user.id : "birrx_v3_user"; 
+        let userId = user && user.id ? user.id : "birrx_production_user"; 
         let firstName = user && user.first_name ? user.first_name : "Abera";
 
         document.getElementById('u-name').innerText = firstName;
         document.getElementById('u-avatar').innerText = firstName.charAt(0).toUpperCase();
 
-        // 🛠️ KEY HAARAWA: Data akka overwrite hin taaneef herrega kee haaraatti hidha.
-        const balKey = 'bx_bal_v3_' + userId;
-        const watchKey = 'bx_wat_v3_' + userId;
-        const todayKey = 'bx_tdy_v3_' + userId;
-        const taskStateKey = 'bx_tasks_v3_' + userId;
+        // 🔐 DATA ISOLATION KEY
+        const balKey = 'bx_bal_prod_' + userId;
+        const watchKey = 'bx_wat_prod_' + userId;
+        const todayKey = 'bx_tdy_prod_' + userId;
+        const taskStateKey = 'bx_tasks_prod_' + userId;
 
-        // 🟢 JALQABA: Screenshot kee irra akkuma jiruatti herregni jalqabaa $1.860 dha.
+        // Yeroo jalqabaa qofa siriinii kee irraa ka'ee $1.860 galcha, dhabama irraa ni ittisa
         let balance = localStorage.getItem(balKey) !== null ? parseFloat(localStorage.getItem(balKey)) : 1.860;
-        let watchedCount = parseInt(localStorage.getItem(watchKey)) || 28;
-        let todayCount = parseInt(localStorage.getItem(todayKey)) || 8;
+        let watchedCount = localStorage.getItem(watchKey) !== null ? parseInt(localStorage.getItem(watchKey)) : 28;
+        let todayCount = localStorage.getItem(todayKey) !== null ? parseInt(localStorage.getItem(todayKey)) : 8;
         let completedTasks = JSON.parse(localStorage.getItem(taskStateKey)) || {};
 
-        // Dashboard yeroma sana guutu
         updateDashboard();
         checkTaskStates();
 
@@ -425,7 +423,7 @@
             document.getElementById('v-watched').innerText = watchedCount;
             document.getElementById('v-today').innerText = todayCount + " / 50";
             
-            // Hir'ina herregaa dhowwuuf herregni yeroo hunda jabaatee kuufama
+            // Kuusaa jabaa
             localStorage.setItem(balKey, balance);
             localStorage.setItem(watchKey, watchedCount);
             localStorage.setItem(todayKey, todayCount);
@@ -445,38 +443,36 @@
             }
         }
 
+        // 🟢 OFFICIAL ADSGRAM INTEGRATION (Unka Haaraa Qajeelfama Keetii)
         function watchAdAction(reward, type) {
-            // Daangaa 'Today's Ads' 50 gochuu (Screenshot duraa keessatti 8/8 waan jiruufis 50tti balliseera)
             if (todayCount >= 50 && type === 'video') {
                 tg.showAlert("Har'aaf Ad daawwattee xumurteetta! Bor deebi'i.");
                 return;
             }
 
-            // AdsGram fe'amaa jiraachuu mirkaneessuu
+            // AdsGram fe'amaa jiraachuu isaa mirkaneessuu
             if (typeof window.Adsgram === 'undefined') {
                 tg.showAlert("⚠️ AdsGram fe'amaa jira, mee sekoondii muraasa booda deebisii yaali!");
                 return;
             }
 
-            try {
-                // Block ID kee irratti hundaahuun asitti tajaajila
-                const AdsController = window.Adsgram.createAdListener({ blockId: "34689" });
-                AdsController.show().then((result) => {
-                    balance += reward;
-                    watchedCount += 1;
-                    if (type === 'video') todayCount += 1;
-                    updateDashboard();
-                    tg.showAlert(`🎁 Hojii Milkaa'aa! +$${reward.toFixed(3)} herrega keetti dabalameera.`);
-                }).catch((result) => {
-                    console.log("AdsGram Exception:", result);
-                    tg.showAlert("⚠️ Beeksisa utuu hin xumurin addaan kutte ykn daangaan beeksisaa biyya keetti dhumateera. Mee VPN saaqii yaali.");
-                });
-            } catch (err) {
-                tg.showAlert("⚠️ AdsGram block id ykn network dogoggora uumeera!");
-            }
+            // Qajeelfama haaraa irratti hundahuun window.Adsgram.init() fayyadamna
+            const AdController = window.Adsgram.init({ blockId: "32795" });
+
+            AdController.show().then((result) => {
+                // Beeksisa guutuu yoo xumuran qofa qarshiin dabalama
+                balance += reward;
+                watchedCount += 1;
+                if (type === 'video') todayCount += 1;
+                updateDashboard();
+                tg.showAlert(`🎁 Hojii Milkaa'aa! +$${reward.toFixed(3)} herrega keetti dabalameera.`);
+            }).catch((result) => {
+                console.log("AdsGram Error Result:", result);
+                tg.showAlert("⚠️ Beeksisa utuu hin xumurin addaan kutte ykn daangaan beeksisaa biyya keetti dhumateera.");
+            });
         }
 
-        // Anti-cheat timer amansiisaa ta'e
+        // Anti-cheat timer task'ota dhuunfaa
         function runTask(id, seconds, reward, linkUrl) {
             if (completedTasks[id]) return; 
 
