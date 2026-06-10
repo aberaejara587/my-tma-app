@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BirrX - Earn Premium App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://sad.adsgram.ai/js/advshare.bundle.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Base Setup & Premium Light Theme */
@@ -257,7 +258,7 @@
             font-size: 15px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 12 rgba(178, 94, 255, 0.3);
+            box-shadow: 0 4px 120px rgba(178, 94, 255, 0.3);
             margin-top: 8px;
         }
 
@@ -300,11 +301,11 @@
     <div class="section-container">
         <div class="section-title"><i class="fa-solid fa-rocket"></i> Quick Actions</div>
         <div class="actions-grid">
-            <button class="action-card" onclick="watchAdAction(0.020)">
+            <button class="action-card" onclick="watchAdAction(0.020, 'video')">
                 <i class="fa-solid fa-circle-play"></i>
                 <span>Watch Ad</span>
             </button>
-            <button class="action-card" onclick="watchAdAction(0.050)">
+            <button class="action-card" onclick="watchAdAction(0.050, 'popup')">
                 <i class="fa-solid fa-bolt"></i>
                 <span>Watch Popup</span>
             </button>
@@ -408,14 +409,12 @@
         const watchKey = 'b_wat_' + userId;
         const todayKey = 'b_tdy_' + userId;
 
-        // Start purely from 0 for the brand new BirrX App
         let balance = parseFloat(localStorage.getItem(balKey)) || 0.000;
         let watchedCount = parseInt(localStorage.getItem(watchKey)) || 0;
         let todayCount = parseInt(localStorage.getItem(todayKey)) || 0;
 
         updateDashboard();
 
-        // Update DOM elements helper function
         function updateDashboard() {
             document.getElementById('v-balance').innerText = balance.toFixed(3);
             document.getElementById('v-watched').innerText = watchedCount;
@@ -425,17 +424,31 @@
             localStorage.setItem(todayKey, todayCount);
         }
 
-        // Action: Click Watch Ads
-        function watchAdAction(reward) {
-            if (todayCount >= 8 && reward === 0.020) {
+        // 🛠️ INTEGRATION ADSGRAM DHUGAA
+        // Block ID kee '34689' kanaan kallattiin uumameera
+        const AdsController = window.Adsgram.createAdListener({
+            blockId: "34689"
+        });
+
+        // Action: Click Watch Ads (AdsGram Connective)
+        function watchAdAction(reward, type) {
+            if (todayCount >= 8 && type === 'video') {
                 tg.showAlert("Har'aaf Ad daawwattee xumurteetta! Bor deebi'i.");
                 return;
             }
-            balance += reward;
-            watchedCount += 1;
-            if (reward === 0.020) todayCount += 1;
-            updateDashboard();
-            tg.showAlert(`🎁 Hojii Milkaa'aa! +$${reward.toFixed(3)} herrega keetti dabalameera.`);
+
+            // Beeksisa AdsGram kaachisuu
+            AdsController.show().then((result) => {
+                // Yoo namni sun hanga dhumaatti daawwate qofa herregaaf dabalama
+                balance += reward;
+                watchedCount += 1;
+                if (type === 'video') todayCount += 1;
+                updateDashboard();
+                tg.showAlert(`🎁 Hojii Milkaa'aa! +$${reward.toFixed(3)} herrega keetti dabalameera.`);
+            }).catch((result) => {
+                // Yoo Error uumame ykn namichi gidduutti addaan kute
+                tg.showAlert("⚠️ Beeksisa utuu hin xumurin addaan kutte ykn error uumame!");
+            });
         }
 
         // Action: Manage Countdown timers for Microtasks
